@@ -2,15 +2,14 @@ MVP:
 	M.1 Load character dictionary.
 	M.2 Search for character by Hanzi, pronunciation or by translation.
 	M.3 Create browsable collections of characters.
-
+	M.4 Search for similar-looking characters.
 
 Optional:
-	O.1 Search for similar-looking characters.
-	O.2 Suggest similar-looking characters to add to a collection.
-	O.3 Study one or several collections.
-	O.4 Create new characters.
-	O.5 Edit characters.
-	O.6 Different study modes (gamification).
-	O.7 Track study statistics.
-	O.8 Integrate Hanzi drawing, e.g. for character lookup or study mode.
-	O.9 Export to Anki, Excel, PDF...
+	O.1 Suggest similar-looking characters to add to a collection.
+	O.2 Study one or several collections.
+	O.3 Create new characters.
+	O.4 Edit characters.
+	O.5 Different study modes (gamification).
+	O.6 Track study statistics.
+	O.7 Integrate Hanzi drawing, e.g. for character lookup or study mode.
+	O.8 Export to Anki, Excel, PDF...
