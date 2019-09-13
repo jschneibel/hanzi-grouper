@@ -1,5 +1,6 @@
 package com.example.hanzi_grouper;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -39,7 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
 
-        ArrayList<ArrayList<String>> groups = loadGroups();
+        // dummmy group
+        ArrayList<String> group;
+        group = new ArrayList<String>();
+        group.add("g3");
+        group.add("a");
+        group.add("b");
+        group.add("c");
+
+        SharedPreferences groupPreferences = getSharedPreferences("groups", 0);
+        saveNewGroup(group, groupPreferences);
+        ArrayList<ArrayList<String>> groups = loadGroups(groupPreferences);
 
         RecyclerView.Adapter overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
         overviewRecycler.setAdapter(overviewRecyclerAdapter);
@@ -70,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<ArrayList<String>> loadGroups() {
+    private ArrayList<ArrayList<String>> loadGroups(SharedPreferences groupPreferences) {
         // dummy data
         ArrayList<String> group1 = new ArrayList<>();
         group1.add("g1");
@@ -86,6 +97,82 @@ public class MainActivity extends AppCompatActivity {
         groups.add(group2);
 
         return groups;
+    }
+
+    private void saveNewGroup(ArrayList<String> group, SharedPreferences groupPreferences) {
+        // dummmy group
+        group = new ArrayList<String>();
+        group.add("g3");
+        group.add("a");
+        group.add("b");
+        group.add("c");
+
+        groupPreferences = getSharedPreferences("groups", 0);
+        SharedPreferences.Editor groupEditor = groupPreferences.edit();
+
+        int groupIndex = 1;
+        int groupSize = group.size() - 1;
+
+        groupEditor.putString(
+                "0000",
+                "1");
+        groupEditor.putString(
+                parseGroupPreferences(new int[]{groupIndex, 0}),
+                Integer.toString(groupSize));
+
+        for (int i = 0; i < group.size(); i++) {
+            groupEditor.putString(
+                    parseGroupPreferences(new int[]{groupIndex, i + 1}),
+                    group.get(i));
+        }
+
+        groupEditor.commit();
+    }
+
+    // TODO: save preferences with delimited strings instead?
+
+    // group preferences format:
+    // max 99 groups
+    // max 99 characters per group
+    // 0000: max group index (number of groups)
+    // 0100: number of characters in first group
+    // 0101: name of first group
+    // 0102: first character of first group
+    // 0103: second character of first group
+    // 0412: 11th character of 4th group
+
+    private String parseGroupPreferences(int[] index) {
+        String groupIndex;
+        String characterIndex;
+
+        // parse groupIndex
+        if (index[0] <= 9)
+            groupIndex = "0".concat(Integer.toString(index[0]));
+        else if (index[0] <= 99)
+            groupIndex = Integer.toString(index[0]);
+        else
+            groupIndex = "00";
+
+
+        // parse characterIndex
+        if (index[1] > 0 && index[1] < 10)
+            characterIndex = "0".concat(Integer.toString(index[1]));
+        else if (index[1] < 100)
+            characterIndex = Integer.toString(index[1]);
+        else
+            characterIndex = "10";
+
+        return groupIndex + characterIndex;
+    }
+
+    private int[] parseGroupPreferences(String index) {
+        int groupIndex;
+        int characterIndex;
+
+        groupIndex = Integer.parseInt(index.substring(0, 2));
+        characterIndex = Integer.parseInt(index.substring(2, 4));
+
+        return new int[]{groupIndex, characterIndex};
     }
 }
 
