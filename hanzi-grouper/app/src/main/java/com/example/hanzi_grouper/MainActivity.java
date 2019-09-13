@@ -14,10 +14,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,21 +36,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
 
-        // dummy data
-        ArrayList<String> group1 = new ArrayList<>();
-        group1.add("g1");
-        group1.add("h1");
-        group1.add("h2");
-        group1.add("h3");
-        ArrayList<String> group2 = new ArrayList<>();
-        group2.add("g2");
-        group2.add("h1");
-        group2.add("h2");
-        ArrayList<ArrayList<String>> groups = new ArrayList<>();
-        groups.add(group1);
-        groups.add(group2);
+        ArrayList<ArrayList<String>> groups = loadGroups();
 
         RecyclerView.Adapter overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
         overviewRecycler.setAdapter(overviewRecyclerAdapter);
@@ -82,20 +69,40 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
 
-class OverviewRecyclerHolder extends RecyclerView.ViewHolder {
-    TextView group;
+    private ArrayList<ArrayList<String>> loadGroups() {
+        // dummy data
+        ArrayList<String> group1 = new ArrayList<>();
+        group1.add("g1");
+        group1.add("滴");
+        group1.add("地");
+        group1.add("第");
+        ArrayList<String> group2 = new ArrayList<>();
+        group2.add("g2");
+        group2.add("值");
+        group2.add("只");
+        ArrayList<ArrayList<String>> groups = new ArrayList<>();
+        groups.add(group1);
+        groups.add(group2);
 
-    public OverviewRecyclerHolder(View v) {
-        super(v);
-
-        group = (TextView) v.findViewById(R.id.group);
+        return groups;
     }
 }
 
-class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerHolder> {
+class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapter.OverviewRecyclerHolder> {
     ArrayList<ArrayList<String>> groups;
+
+    class OverviewRecyclerHolder extends RecyclerView.ViewHolder {
+        TextView groupName;
+        TextView groupChars;
+
+        public OverviewRecyclerHolder(View v) {
+            super(v);
+
+            groupName = (TextView) v.findViewById(R.id.group_name);
+            groupChars = (TextView) v.findViewById(R.id.group_chars);
+        }
+    }
 
     OverviewRecyclerAdapter(ArrayList<ArrayList<String>> groups) {
         this.groups = groups;
@@ -109,7 +116,7 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerHolde
     @NonNull
     @Override
     public OverviewRecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.overview_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.overview_recycler_layout, parent, false);
         OverviewRecyclerHolder holder = new OverviewRecyclerHolder(v);
         return holder;
     }
@@ -118,12 +125,14 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerHolde
     public void onBindViewHolder(@NonNull OverviewRecyclerHolder overviewRecyclerHolder, int position) {
         ArrayList<String> group = groups.get(position);
 
-        Log.d("test", groups.toString());
-        Log.d("test", group.toString());
-        String output = group.get(0).concat(":");
+        String name = group.get(0).concat(": ");
+        String chars = "";
+
         for (int i = 1; i < group.size(); i++) {
-            output = output.concat(" ").concat(group.get(i));
+            chars = chars.concat(" ").concat(group.get(i));
         }
-        overviewRecyclerHolder.group.setText(output);
+
+        overviewRecyclerHolder.groupName.setText(name);
+        overviewRecyclerHolder.groupChars.setText(chars);
     }
 }
