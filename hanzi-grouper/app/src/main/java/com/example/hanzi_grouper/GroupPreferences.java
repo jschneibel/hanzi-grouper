@@ -64,4 +64,13 @@ public abstract class GroupPreferences {
 
         return groups;
     }
+
+    public static ArrayList<String> findGroupByName(ArrayList<ArrayList<String>> groups, String groupName) {
+        for (ArrayList<String> group : groups) {
+            if (group.get(0).equals(groupName))
+                return group;
+        }
+
+        return null;
+    }
 }
