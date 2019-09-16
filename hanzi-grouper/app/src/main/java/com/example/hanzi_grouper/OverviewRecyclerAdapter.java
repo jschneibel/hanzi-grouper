@@ -10,19 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapter.OverviewRecyclerHolder> {
-    ArrayList<ArrayList<String>> groups;
-
-    class OverviewRecyclerHolder extends RecyclerView.ViewHolder {
-        TextView groupName;
-        TextView groupChars;
-
-        public OverviewRecyclerHolder(View v) {
-            super(v);
-
-            groupName = (TextView) v.findViewById(R.id.group_name);
-            groupChars = (TextView) v.findViewById(R.id.group_chars);
-        }
-    }
+    private ArrayList<ArrayList<String>> groups;
+    private View.OnClickListener onClickListener;
 
     OverviewRecyclerAdapter(ArrayList<ArrayList<String>> groups) {
         this.groups = groups;
@@ -54,5 +43,24 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapt
 
         overviewRecyclerHolder.groupName.setText(name);
         overviewRecyclerHolder.groupChars.setText(chars);
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    class OverviewRecyclerHolder extends RecyclerView.ViewHolder {
+        TextView groupName;
+        TextView groupChars;
+
+        public OverviewRecyclerHolder(View v) {
+            super(v);
+
+            groupName = (TextView) v.findViewById(R.id.group_name);
+            groupChars = (TextView) v.findViewById(R.id.group_chars);
+
+            v.setTag(this);
+            v.setOnClickListener(onClickListener);
+        }
     }
 }

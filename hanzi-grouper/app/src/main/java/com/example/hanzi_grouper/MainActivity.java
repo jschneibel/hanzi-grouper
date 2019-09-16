@@ -83,33 +83,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
-
-        // dummy data
-//        ArrayList<String> group1 = new ArrayList<>();
-//        group1.add("g1");
-//        group1.add("滴");
-//        group1.add("地");
-//        group1.add("第");
-//        ArrayList<String> group2 = new ArrayList<>();
-//        group2.add("g2");
-//        group2.add("值");
-//        group2.add("只");
-//        ArrayList<ArrayList<String>> groups = new ArrayList<>();
-//        groups.add(group1);
-//        groups.add(group2);
-
-
-//        GroupPreferences.saveGroups(groups, this);
-
         groups = GroupPreferences.loadGroups(this);
 
-        RecyclerView.Adapter overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
+        RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
+        OverviewRecyclerAdapter overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
         overviewRecycler.setAdapter(overviewRecyclerAdapter);
+        overviewRecycler.setLayoutManager(new LinearLayoutManager(this));
+        overviewRecyclerAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+                int position = viewHolder.getAdapterPosition();
+                String groupName = groups.get(position).get(0);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
-        overviewRecycler.setLayoutManager(linearLayoutManager);
+                Snackbar.make(findViewById(R.id.fab), "nr: " + groupName, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
