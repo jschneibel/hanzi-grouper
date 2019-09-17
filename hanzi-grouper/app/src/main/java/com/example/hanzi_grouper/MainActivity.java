@@ -2,6 +2,7 @@ package com.example.hanzi_grouper;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         groups = GroupPreferences.loadGroups(this);
-        
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
             String groupName = groups.get(position).get(0);
+
+            Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+            intent.putExtra(EXTRA_GROUP, groups.get(position));
+            startActivity(intent);
 
             Snackbar.make(findViewById(R.id.fab), "nr: " + groupName, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
