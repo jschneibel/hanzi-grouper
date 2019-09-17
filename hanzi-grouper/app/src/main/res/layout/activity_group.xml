@@ -23,11 +23,19 @@
     <include layout="@layout/content_group" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/new_character"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        />
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="+"
+        android:elevation="6dp"
+        android:textSize="32dp"
+        android:textColor="#fff"
+        app:layout_anchor="@id/new_character"
+        app:layout_anchorGravity="center"/>
 
 </android.support.design.widget.CoordinatorLayout>

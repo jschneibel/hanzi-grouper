@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.new_group);
         fab.setOnClickListener(new NewGroupOnClickListener());
 
         RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             closeKeyboard();
-                            Snackbar.make(findViewById(R.id.fab), snackbarMessage, Snackbar.LENGTH_LONG)
+                            Snackbar.make(findViewById(R.id.new_group), snackbarMessage, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }
                     })
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_GROUP, groups.get(position));
             startActivity(intent);
 
-            Snackbar.make(findViewById(R.id.fab), "nr: " + groupName, Snackbar.LENGTH_LONG)
+            Snackbar.make(findViewById(R.id.new_group), "nr: " + groupName, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }

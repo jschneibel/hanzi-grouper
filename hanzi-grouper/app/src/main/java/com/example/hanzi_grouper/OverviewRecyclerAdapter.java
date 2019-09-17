@@ -25,7 +25,7 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapt
     @NonNull
     @Override
     public OverviewRecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.overview_recycler_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_overview_recycler, parent, false);
         OverviewRecyclerHolder holder = new OverviewRecyclerHolder(v);
         return holder;
     }
