@@ -17,7 +17,7 @@ public class GroupActivity extends AppCompatActivity {
 
     static final String EXTRA_CHARACTER = "com.example.hanzi_grouper.CHARACTER";
 
-    private ArrayList<String> group;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +27,15 @@ public class GroupActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        group = intent.getStringArrayListExtra(MainActivity.EXTRA_GROUP);
+        group = (Group) intent.getSerializableExtra(MainActivity.EXTRA_GROUP);
 
-        getSupportActionBar().setTitle(group.get(0));
+        getSupportActionBar().setTitle(group.getName());
 
         FloatingActionButton fab = findViewById(R.id.new_character);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, group.get(0), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, group.getName(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -62,7 +62,7 @@ public class GroupActivity extends AppCompatActivity {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            String character = group.get(position + 1);
+            String character = group.getCharacters().get(position);
 
 //            Intent intent = new Intent(GroupActivity.this, CharacterActivity.class);
 //            intent.putExtra(EXTRA_CHARACTER, group.get(position));

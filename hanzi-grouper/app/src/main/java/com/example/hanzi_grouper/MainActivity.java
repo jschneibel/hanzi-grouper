@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     static final String EXTRA_GROUP = "com.example.hanzi_grouper.GROUP";
 
-    private ArrayList<ArrayList<String>> groups;
+    private ArrayList<Group> groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +86,14 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             String newGroupName = groupNameEditText.getText().toString();
 
-                            ArrayList<String> group = GroupPreferences.findGroupByName(groups, newGroupName);
+                            Group group = GroupPreferences.findGroupByName(groups, newGroupName);
                             String snackbarMessage;
 
                             if (newGroupName.equals("")) {
                                 snackbarMessage = "No group name entered.";
                             }
                             else if (group == null) {    // group is null if name is not a duplicate
-                                group = new ArrayList<>();
-                                group.add(newGroupName);
+                                group = new Group(newGroupName);
                                 groups.add(group);
                                 GroupPreferences.saveGroups(groups, MainActivity.this);
                                 snackbarMessage = "New group '" + newGroupName + "' created.";
@@ -120,12 +119,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void showKeyboard(){
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
 
         private void closeKeyboard(){
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
     }
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-            String groupName = groups.get(position).get(0);
+            String groupName = groups.get(position).getName();
 
             Intent intent = new Intent(MainActivity.this, GroupActivity.class);
             intent.putExtra(EXTRA_GROUP, groups.get(position));

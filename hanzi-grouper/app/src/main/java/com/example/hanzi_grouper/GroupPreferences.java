@@ -4,33 +4,54 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.List;
+
+// Structure of SharedPreferences:
+//
+// Name of SharedPreference: PREFERENCES
+//
+// Key: GROUP_NAMES
+// Value: group names delimited by DELIMITER
+//
+// Key: group name prefixed by GROUP_NAME_PREFIX
+// Value: characters, pinyin and meanings (in this order per character) of the group
+// delimited by DELIMITER
+//
+// If a group is deleted, its contents get "orphaned" (its key is deleted, its value is not).
 
 public abstract class GroupPreferences {
-    private static final String PREFERENCES = "groups";
-    private static final String GROUP_NAMES = "groupNames";
-    private static final String GROUP_NAME_PREFIX = "#"; // To avoid clashes with other preferences.
+
+    private static final String PREFERENCES = "groups"; // Name of the SharedPreference
+    private static final String GROUP_NAMES = "groupNames"; // Key containing all group names
+    private static final String GROUP_NAME_PREFIX = "#"; // Prefix for each group name key
     private static final String DELIMITER = "|";
     private static final String DELIMITER_REGEX = "\\|";
 
-    public static void saveGroups(ArrayList<ArrayList<String>> groups, Context ctx) {
+    public static void saveGroups(ArrayList<Group> groups, Context ctx) {
         SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCES, 0);
         SharedPreferences.Editor editor = preferences.edit();
 
         StringBuilder groupNames = new StringBuilder();
-        StringBuilder groupCharacters;
 
-        for (ArrayList<String> group : groups) {
-            groupNames.append(group.get(0));
+        for (Group group : groups) {
+            groupNames.append(group.getName());
             groupNames.append(DELIMITER);
 
-            groupCharacters = new StringBuilder();
-            if (group.size() > 1) {
-                for (int i = 1; i < group.size(); i++) {
-                    groupCharacters.append(group.get(i));
-                    groupCharacters.append(DELIMITER);
+            StringBuilder groupContents = new StringBuilder();
+
+            if (group.size() > 0) {
+
+                for (int i = 0; i < group.size(); i++) {
+                    groupContents.append(group.getCharacters().get(i));
+                    groupContents.append(DELIMITER);
+                    groupContents.append(group.getPinyin().get(i));
+                    groupContents.append(DELIMITER);
+                    groupContents.append(group.getMeanings().get(i));
+                    groupContents.append(DELIMITER);
                 }
             }
-            editor.putString(GROUP_NAME_PREFIX.concat(group.get(0)), groupCharacters.toString());
+
+            editor.putString(GROUP_NAME_PREFIX.concat(group.getName()), groupContents.toString());
         }
 
         editor.putString(GROUP_NAMES, groupNames.toString());
@@ -38,26 +59,45 @@ public abstract class GroupPreferences {
         editor.apply();
     }
 
-    public static ArrayList<ArrayList<String>> loadGroups(Context ctx) {
-        ArrayList<ArrayList<String>> groups = new ArrayList<>();
+    public static ArrayList<Group> loadGroups(Context ctx) {
+        ArrayList<Group> groups = new ArrayList<>();
 
         SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCES, 0);
 
         String[] groupNames = preferences.getString(GROUP_NAMES, "").split(DELIMITER_REGEX);
-        String[] groupCharacters;
-        ArrayList<String> group;
+        String[] groupContents;
+        List<String> characters = new ArrayList<>();
+        List<String> pinyin = new ArrayList<>();
+        List<String> meanings = new ArrayList<>();
+        Group group;
 
         for (String groupName : groupNames) {
-            group = new ArrayList<>();
+            group = new Group(groupName);
 
-            groupCharacters = preferences.
+            groupContents = preferences.
                     getString(GROUP_NAME_PREFIX.concat(groupName), "").
-                    split(DELIMITER_REGEX);
+                    split(DELIMITER_REGEX); // is not null
 
-            group.add(groupName);
+            int i = 0;
 
-            for (String character : groupCharacters)
-                group.add(character);
+            if (groupContents.length % 3 == 0) {
+                while (i < groupContents.length) {
+                    characters.add(groupContents[i]);
+                    i++;
+                    pinyin.add(groupContents[i]);
+                    i++;
+                    meanings.add(groupContents[i]);
+                    i++;
+                }
+            }
+            else if (groupContents[0].equals("")) {
+
+            }
+            else {
+                break; // omit group if data is corrupt
+            }
+
+            group.setEntries(characters, pinyin, meanings);
 
             groups.add(group);
         }
@@ -65,9 +105,9 @@ public abstract class GroupPreferences {
         return groups;
     }
 
-    public static ArrayList<String> findGroupByName(ArrayList<ArrayList<String>> groups, String groupName) {
-        for (ArrayList<String> group : groups) {
-            if (group.get(0).equals(groupName))
+    public static Group findGroupByName(ArrayList<Group> groups, String groupName) {
+        for (Group group : groups) {
+            if (group.getName().equals(groupName))
                 return group;
         }
 

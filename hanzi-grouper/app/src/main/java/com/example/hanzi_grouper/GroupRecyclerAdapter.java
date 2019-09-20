@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.GroupRecyclerHolder> {
-    private ArrayList<String> group;
+    private Group group;
     private int[] toneColors;
     private View.OnClickListener onClickListener;
 
-    GroupRecyclerAdapter(ArrayList<String> group, int[] toneColors) {
+    GroupRecyclerAdapter(Group group, int[] toneColors) {
         this.group = group;
         this.toneColors = toneColors;
     }
@@ -29,13 +29,12 @@ class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.Gro
     @Override
     public GroupRecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_group_recycler, parent, false);
-        GroupRecyclerHolder holder = new GroupRecyclerHolder(v);
-        return holder;
+        return new GroupRecyclerHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupRecyclerHolder overviewRecyclerHolder, int position) {
-        String character = group.get(position + 1);
+        String character = group.getCharacters().get(position);
         String pinyin = "yan5";
         String meaning = "meaning is a meaning";
 
