@@ -1,7 +1,9 @@
 package com.example.hanzi_grouper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,8 @@ public abstract class GroupPreferences {
 
             }
             else {
+                Snackbar.make(((Activity) ctx).findViewById(R.id.new_group), "Error: Corrupted group.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 break; // omit group if data is corrupt
             }
 
