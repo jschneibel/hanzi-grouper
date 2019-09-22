@@ -91,12 +91,13 @@ public class GroupActivity extends AppCompatActivity {
 
             String character = group.getCharacters().get(position);
 
-//            Intent intent = new Intent(GroupActivity.this, CharacterActivity.class);
-//            intent.putExtra(EXTRA_CHARACTER, group.get(position));
-//            startActivity(intent);
+            Intent intent = new Intent(GroupActivity.this, CharacterActivity.class);
+            intent.putExtra(MainActivity.EXTRA_GROUP, group.getName());
+            intent.putExtra(EXTRA_CHARACTER, character);
+            startActivity(intent);
 
-            Snackbar.make(findViewById(R.id.new_character), "Character: " + character, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            Snackbar.make(findViewById(R.id.new_character), "Character: " + character, Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
         }
     }
 }

@@ -141,14 +141,15 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
+
             String groupName = groups.get(position).getName();
 
             Intent intent = new Intent(MainActivity.this, GroupActivity.class);
-            intent.putExtra(EXTRA_GROUP, groups.get(position).getName());
+            intent.putExtra(EXTRA_GROUP, groupName);
             startActivity(intent);
 
-            Snackbar.make(findViewById(R.id.new_group), "nr: " + groupName, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            Snackbar.make(findViewById(R.id.new_group), "nr: " + groupName, Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
         }
     }
 }

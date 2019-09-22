@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // Structure of SharedPreferences:
@@ -26,8 +28,8 @@ public abstract class GroupPreferences {
     private static final String PREFERENCES = "groups"; // Name of the SharedPreference
     private static final String GROUP_NAMES = "groupNames"; // Key containing all group names
     private static final String GROUP_NAME_PREFIX = "#"; // Prefix for each group name key
-    private static final String DELIMITER = "||";
-    private static final String DELIMITER_REGEX = "\\|\\|";
+    private static final String DELIMITER = Character.toString((char) 31); // ASCII 'unit separator'
+    private static final String DELIMITER_REGEX = Character.toString((char) 31);
 
     public static void saveGroups(ArrayList<Group> groups, Context ctx) {
         SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCES, 0);
@@ -39,21 +41,21 @@ public abstract class GroupPreferences {
             groupNames.append(group.getName());
             groupNames.append(DELIMITER);
 
-            StringBuilder groupContents = new StringBuilder();
+            StringBuilder groupEntries = new StringBuilder();
 
             if (group.size() > 0) {
 
                 for (int i = 0; i < group.size(); i++) {
-                    groupContents.append(group.getCharacters().get(i));
-                    groupContents.append(DELIMITER);
-                    groupContents.append(group.getPinyin().get(i));
-                    groupContents.append(DELIMITER);
-                    groupContents.append(group.getMeanings().get(i));
-                    groupContents.append(DELIMITER);
+                    groupEntries.append(group.getCharacters().get(i));
+                    groupEntries.append(DELIMITER);
+                    groupEntries.append(group.getPinyin().get(i));
+                    groupEntries.append(DELIMITER);
+                    groupEntries.append(group.getMeanings().get(i));
+                    groupEntries.append(DELIMITER);
                 }
             }
 
-            editor.putString(GROUP_NAME_PREFIX.concat(group.getName()), groupContents.toString());
+            editor.putString(GROUP_NAME_PREFIX.concat(group.getName()), groupEntries.toString());
         }
 
         editor.putString(GROUP_NAMES, groupNames.toString());
@@ -61,13 +63,16 @@ public abstract class GroupPreferences {
         editor.apply();
     }
 
-    // TODO: don't display anything if no groups present.
     public static ArrayList<Group> loadGroups(Context ctx) {
         ArrayList<Group> groups = new ArrayList<>();
 
         SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCES, 0);
 
         String[] groupNames = preferences.getString(GROUP_NAMES, "").split(DELIMITER_REGEX);
+        if (groupNames[0].equals("")) {
+            return groups;  // return empty ArrayList if there are no groups
+        }
+
         String[] groupContents;
         List<String> characters;
         List<String> pinyin;
@@ -75,6 +80,9 @@ public abstract class GroupPreferences {
         Group group;
 
         for (String groupName : groupNames) {
+            if (groupName.equals("")) {
+                continue;
+            }
             group = new Group(groupName);
             characters = new ArrayList<>();
             pinyin = new ArrayList<>();
@@ -95,13 +103,12 @@ public abstract class GroupPreferences {
                     meanings.add(groupContents[i]);
                     i++;
                 }
-            }
-            else if (groupContents[0].equals("")) {
+            } else if (groupContents[0].equals("")) {
 
-            }
-            else {
+            } else {
                 Snackbar.make(((Activity) ctx).findViewById(R.id.toolbar), "Deleted corrupted group '" + groupName + "'.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
                 break; // omit group if data is corrupted
             }
 
