@@ -2,50 +2,56 @@ package com.example.hanzi_grouper;
 
 import android.util.Log;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Dictionary {
-    private static Dictionary singleton;
-
-    private HashMap<String, String> dictionary;
-    private HashMap<String, String> simplifiedToPinyin = new HashMap<String, String>();
-    private HashMap<String, String> simplifiedToMeaning = new HashMap<String, String>();
+public class Decompositions {
+    private static Decompositions singleton;
 
     // Data of each column gets loaded into its own ArrayList.
     private ArrayList<String> simplified = new ArrayList<>();
-    private ArrayList<String> traditional = new ArrayList<>();
-    private ArrayList<String> pinyin = new ArrayList<>();
-    private ArrayList<String> meaningsUnsplit = new ArrayList<>();
-    private ArrayList<ArrayList<String>> meanings = new ArrayList<>();
 
-    private Dictionary(InputStream dictionaryStream) {
-        parseDictionaryFile(dictionaryStream);
+    private Decompositions(InputStream decompositionsStream) {
+        parseDecompositionsFile(decompositionsStream);
     }
 
-    public static Dictionary getDictionary(InputStream dictionaryStream) {
+    public static Decompositions getDecompositions(InputStream decompositionsStream) {
         if (singleton == null) {
-            Log.d("custom", "Parsing dictionary file.");
-            singleton = new Dictionary(dictionaryStream);
-            Log.d("custom", "Finished parsing dictionary file.");
+            Log.d("custom", "Parsing decompositions file.");
+            singleton = new Decompositions(decompositionsStream);
+            Log.d("custom", "Finished parsing decompositions file.");
         }
         else {
-            Log.d("custom", "Returning previously loaded dictionary.");
+            Log.d("custom", "Returning previously loaded decompositions.");
         }
 
         return singleton;
     }
 
-    private void parseDictionaryFile(InputStream dictionaryStream) {
+    private void parseDecompositionsFile(InputStream decompositionsStream) {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(dictionaryStream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(decompositionsStream));
+
+//      Columns in file:
+//      Character
+//      Strokes
+//      CompositionType
+//      LeftComponent
+//      LeftStrokes
+//      RightComponent
+//      RightStrokes
+//      Signature
+//      Notes
+//      Section
 
         try {
-//            dictionary = new Hashtable<>();
             String line;
-            String[] delimited;
+            String[] delimited = new String[2];
 
             while (reader.ready()) {
                 line = reader.readLine();
