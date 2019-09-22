@@ -1,10 +1,9 @@
 package com.example.hanzi_grouper;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group implements Serializable {
+public class Group {
     private String name;
     private ArrayList<String> characters = new ArrayList<>();
     private ArrayList<String> pinyin = new ArrayList<>();
@@ -49,7 +48,7 @@ public class Group implements Serializable {
 
     public void setEntries(List<String> characters,
                            List<String> pinyin,
-                           List<String> meanings) throws IllegalArgumentException {
+                           List<String> meanings) {
 
         // commented because setEntries should throw exception when passed null
 //        characters = (characters == null) ? new ArrayList<String>() : characters;

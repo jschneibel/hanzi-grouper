@@ -28,7 +28,11 @@ public class Dictionary {
 
     public static Dictionary getDictionary(InputStream dictionaryStream) {
         if (singleton == null) {
+            Log.d("custom", "Parsing dictionary file.");
             singleton = new Dictionary(dictionaryStream);
+        }
+        else {
+            Log.d("custom", "Returning previously loaded dictionary.");
         }
 
         return singleton;
@@ -91,7 +95,7 @@ public class Dictionary {
             Log.d("custom", "Length pinyin: " + pinyin.size());
             Log.d("custom", "Length meaningsUnsplit: " + meaningsUnsplit.size());
             Log.d("custom", "Length meanings: " + meanings.size());
-            Log.d("custom", "Finished parsing dictionary resource. \n");
+            Log.d("custom", "Finished parsing dictionary file. \n");
 
 //            int id = 49982;
             int id = 5002;

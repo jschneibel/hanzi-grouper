@@ -11,23 +11,33 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
 
     static final String EXTRA_CHARACTER = "com.example.hanzi_grouper.CHARACTER";
 
-    private Group group;
+    private Dictionary dictionary;      // static singleton
+    private ArrayList<Group> groups;    // all persisted groups
+    private Group group;                // displayed group
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        groups = GroupPreferences.loadGroups(this);
+
         setContentView(R.layout.activity_group);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
+        dictionary = Dictionary.getDictionary(dictionaryStream);
+
         Intent intent = getIntent();
-        group = (Group) intent.getSerializableExtra(MainActivity.EXTRA_GROUP);
+        String groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);
+        group = GroupPreferences.findGroupByName(groups, groupName);
 
         getSupportActionBar().setTitle(group.getName());
 

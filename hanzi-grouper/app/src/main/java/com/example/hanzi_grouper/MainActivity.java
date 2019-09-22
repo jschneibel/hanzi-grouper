@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     static final String EXTRA_GROUP = "com.example.hanzi_grouper.GROUP";
 
-    private ArrayList<Group> groups;
+    private Dictionary dictionary;      // static singleton
+    private ArrayList<Group> groups;    // all persisted groups
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
-        Dictionary dictionary = Dictionary.getDictionary(dictionaryStream);
+        dictionary = Dictionary.getDictionary(dictionaryStream);
 
         FloatingActionButton fab = findViewById(R.id.new_group);
         fab.setOnClickListener(new NewGroupOnClickListener());
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             String groupName = groups.get(position).getName();
 
             Intent intent = new Intent(MainActivity.this, GroupActivity.class);
-            intent.putExtra(EXTRA_GROUP, groups.get(position));
+            intent.putExtra(EXTRA_GROUP, groups.get(position).getName());
             startActivity(intent);
 
             Snackbar.make(findViewById(R.id.new_group), "nr: " + groupName, Snackbar.LENGTH_LONG)

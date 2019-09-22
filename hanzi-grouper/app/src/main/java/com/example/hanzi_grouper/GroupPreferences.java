@@ -98,7 +98,7 @@ public abstract class GroupPreferences {
             else {
                 Snackbar.make(((Activity) ctx).findViewById(R.id.new_group), "Error: Corrupted group.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                break; // omit group if data is corrupt
+                break; // omit group if data is corrupted
             }
 
             group.setEntries(characters, pinyin, meanings);
