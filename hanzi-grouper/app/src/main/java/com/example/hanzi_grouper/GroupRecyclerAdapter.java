@@ -3,6 +3,7 @@ package com.example.hanzi_grouper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.Gro
 
     @Override
     public int getItemCount() {
-        return group.size() - 1;
+        return group.size();
     }
 
     @NonNull
@@ -35,8 +36,8 @@ class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.Gro
     @Override
     public void onBindViewHolder(@NonNull GroupRecyclerHolder overviewRecyclerHolder, int position) {
         String character = group.getCharacters().get(position);
-        String pinyin = "yan5";
-        String meaning = "meaning is a meaning";
+        String pinyin = group.getPinyin().get(position);
+        String meaning = group.getMeanings().get(position);
 
         overviewRecyclerHolder.characterView.setText(character);
         overviewRecyclerHolder.pinyinView.setText(pinyin);

@@ -61,6 +61,7 @@ public abstract class GroupPreferences {
         editor.apply();
     }
 
+    // TODO: don't display anything if no groups present.
     public static ArrayList<Group> loadGroups(Context ctx) {
         ArrayList<Group> groups = new ArrayList<>();
 
@@ -68,13 +69,16 @@ public abstract class GroupPreferences {
 
         String[] groupNames = preferences.getString(GROUP_NAMES, "").split(DELIMITER_REGEX);
         String[] groupContents;
-        List<String> characters = new ArrayList<>();
-        List<String> pinyin = new ArrayList<>();
-        List<String> meanings = new ArrayList<>();
+        List<String> characters;
+        List<String> pinyin;
+        List<String> meanings;
         Group group;
 
         for (String groupName : groupNames) {
             group = new Group(groupName);
+            characters = new ArrayList<>();
+            pinyin = new ArrayList<>();
+            meanings = new ArrayList<>();
 
             groupContents = preferences.
                     getString(GROUP_NAME_PREFIX.concat(groupName), "").
@@ -96,7 +100,7 @@ public abstract class GroupPreferences {
 
             }
             else {
-                Snackbar.make(((Activity) ctx).findViewById(R.id.new_group), "Error: Corrupted group.", Snackbar.LENGTH_LONG)
+                Snackbar.make(((Activity) ctx).findViewById(R.id.new_group), "Error: Corrupted group '" + groupName + "'.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break; // omit group if data is corrupted
             }

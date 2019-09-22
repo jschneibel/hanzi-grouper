@@ -10,12 +10,11 @@ import java.util.HashMap;
 public class Dictionary {
     private static Dictionary singleton;
 
-
     private HashMap<String, String> dictionary;
     private HashMap<String, String> simplifiedToPinyin = new HashMap<String, String>();
     private HashMap<String, String> simplifiedToMeaning = new HashMap<String, String>();
 
-    // Data of each column gets into its own ArrayList.
+    // Data of each column gets loaded into its own ArrayList.
     private ArrayList<String> simplified = new ArrayList<>();
     private ArrayList<String> traditional = new ArrayList<>();
     private ArrayList<String> pinyin = new ArrayList<>();
@@ -30,6 +29,7 @@ public class Dictionary {
         if (singleton == null) {
             Log.d("custom", "Parsing dictionary file.");
             singleton = new Dictionary(dictionaryStream);
+            Log.d("custom", "Finished parsing dictionary file.");
         }
         else {
             Log.d("custom", "Returning previously loaded dictionary.");
@@ -90,12 +90,11 @@ public class Dictionary {
                 }
             }
 
-            Log.d("custom", "Length simplified: " + simplified.size());
-            Log.d("custom", "Length traditional: " + traditional.size());
-            Log.d("custom", "Length pinyin: " + pinyin.size());
-            Log.d("custom", "Length meaningsUnsplit: " + meaningsUnsplit.size());
-            Log.d("custom", "Length meanings: " + meanings.size());
-            Log.d("custom", "Finished parsing dictionary file. \n");
+//            Log.d("custom", "Length simplified: " + simplified.size());
+//            Log.d("custom", "Length traditional: " + traditional.size());
+//            Log.d("custom", "Length pinyin: " + pinyin.size());
+//            Log.d("custom", "Length meaningsUnsplit: " + meaningsUnsplit.size());
+//            Log.d("custom", "Length meanings: " + meanings.size());
 
 //            int id = 49982;
             int id = 5002;
@@ -114,7 +113,7 @@ public class Dictionary {
 
     // TODO: implement
     // TODO: multiple results
-    public String[] read(String search) {
+    public String[] search(String search) {
         // index 0: hanzi
         // index 1: pinyin
         // index 2: meaning
@@ -127,5 +126,15 @@ public class Dictionary {
             return record;
         // else
             // return null;
+    }
+
+    public ArrayList<String> findEntryByCharacter(String character) {
+        ArrayList<String> result = new ArrayList<String>();
+
+        result.add("1");
+        result.add("2");
+        result.add("3");
+
+        return result;
     }
 }

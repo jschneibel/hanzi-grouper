@@ -38,7 +38,7 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapt
         String nameText = group.getName().concat(": ");
         String charactersText = "";
 
-        for (int i = 1; i < group.size(); i++) {
+        for (int i = 0; i < group.size(); i++) {
             charactersText = charactersText.concat(" ").concat(characters.get(i));
         }
 

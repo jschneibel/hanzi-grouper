@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import java.io.InputStream;
@@ -21,6 +22,8 @@ public class GroupActivity extends AppCompatActivity {
     private Dictionary dictionary;      // static singleton
     private ArrayList<Group> groups;    // all persisted groups
     private Group group;                // displayed group
+
+    private GroupRecyclerAdapter groupRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,18 @@ public class GroupActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, group.getName(), Snackbar.LENGTH_LONG)
+                ArrayList<String> result = dictionary.findEntryByCharacter("椋");
+                ArrayList<String> characters = group.getCharacters();
+                ArrayList<String> pinyin = group.getPinyin();
+                ArrayList<String> meanings = group.getMeanings();
+                characters.add(result.get(0));
+                pinyin.add(result.get(1));
+                meanings.add(result.get(2));
+                group.setEntries(characters, pinyin, meanings);
+                groupRecyclerAdapter.notifyItemInserted(group.size() - 1);
+                GroupPreferences.saveGroups(groups, GroupActivity.this);
+
+                Snackbar.make(view, "Add sample character.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -60,10 +74,10 @@ public class GroupActivity extends AppCompatActivity {
         };
 
         RecyclerView groupRecycler = (RecyclerView) findViewById(R.id.group_recycler);
-        GroupRecyclerAdapter groupRecyclerAdapter = new GroupRecyclerAdapter(group, toneColors);
+        groupRecyclerAdapter = new GroupRecyclerAdapter(group, toneColors);
         groupRecycler.setAdapter(groupRecyclerAdapter);
         groupRecycler.setLayoutManager(new LinearLayoutManager(this));
-        groupRecyclerAdapter.setOnClickListener(new GroupActivity.GroupRecyclerOnClickListener());
+        groupRecyclerAdapter.setOnClickListener(new GroupRecyclerOnClickListener());
     }
 
     class GroupRecyclerOnClickListener implements View.OnClickListener {

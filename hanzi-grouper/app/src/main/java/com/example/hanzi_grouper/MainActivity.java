@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private Dictionary dictionary;      // static singleton
     private ArrayList<Group> groups;    // all persisted groups
 
+    private OverviewRecyclerAdapter overviewRecyclerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new NewGroupOnClickListener());
 
         RecyclerView overviewRecycler = (RecyclerView) findViewById(R.id.overview_recycler);
-        OverviewRecyclerAdapter overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
+        overviewRecyclerAdapter = new OverviewRecyclerAdapter(groups);
         overviewRecycler.setAdapter(overviewRecyclerAdapter);
         overviewRecycler.setLayoutManager(new LinearLayoutManager(this));
         overviewRecyclerAdapter.setOnClickListener(new OverviewRecyclerOnClickListener());
@@ -93,24 +95,27 @@ public class MainActivity extends AppCompatActivity {
 
                             if (newGroupName.equals("")) {
                                 snackbarMessage = "No group name entered.";
-                            }
-                            else if (group == null) {    // group is null if name is not a duplicate
+                            } else if (group == null) {    // group is null if name is not a duplicate
                                 group = new Group(newGroupName);
                                 groups.add(group);
+                                overviewRecyclerAdapter.notifyItemInserted(groups.size() - 1);
                                 GroupPreferences.saveGroups(groups, MainActivity.this);
                                 snackbarMessage = "New group '" + newGroupName + "' created.";
-                            }
-                            else {
-                                snackbarMessage = "Group '" + newGroupName + "' already exists!";
+                            } else {
+                                snackbarMessage = "Group '" + newGroupName + "' already exists.";
                             }
 
-                            closeKeyboard();
                             Snackbar.make(findViewById(R.id.new_group), snackbarMessage, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
                             closeKeyboard();
                         }
                     });
@@ -120,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
             showKeyboard();
         }
 
-        private void showKeyboard(){
+        private void showKeyboard() {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
 
-        private void closeKeyboard(){
+        private void closeKeyboard() {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
