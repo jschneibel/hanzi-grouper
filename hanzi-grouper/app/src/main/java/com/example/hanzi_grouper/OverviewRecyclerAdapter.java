@@ -36,10 +36,13 @@ class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecyclerAdapt
         ArrayList<String> characters = group.getCharacters();
 
         String nameText = group.getName().concat(": ");
-        String charactersText = "";
+        StringBuilder charactersText = new StringBuilder();
 
         for (int i = 0; i < group.size(); i++) {
-            charactersText = charactersText.concat(" ").concat(characters.get(i));
+            charactersText.append(" ").append(characters.get(i));
+            if (i < group.size() - 1) {
+                charactersText.append(",");
+            }
         }
 
         overviewRecyclerHolder.groupName.setText(nameText);

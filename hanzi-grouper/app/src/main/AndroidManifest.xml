@@ -12,7 +12,12 @@
         <activity
             android:name=".CharacterActivity"
             android:label="@string/title_activity_character"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".GroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hanzi_grouper.GroupActivity" />
+        </activity>
         <activity
             android:name=".GroupActivity"
             android:label="@string/title_activity_group"
