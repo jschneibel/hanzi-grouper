@@ -128,10 +128,14 @@ public class Dictionary {
             // return null;
     }
 
-    public ArrayList<String> findEntryByCharacter(String character) {
+    public ArrayList<String> findEntryByCharacter(String search) {
         ArrayList<String> result = new ArrayList<String>();
 
-        int index = simplified.indexOf(character);
+        if (singleton == null) {
+            return null;    // return null if dictionary is not loaded yet
+        }
+
+        int index = simplified.indexOf(search);
 
         if (index != -1) {
             result.add(simplified.get(index));
@@ -141,6 +145,32 @@ public class Dictionary {
             return result;
         }
 
-        return null;
+        return null;    // return null if character is not found
+    }
+
+    public ArrayList<ArrayList<String>> findEntryByPinyin(String search) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        result.add(new ArrayList<String>());    // characters
+        result.add(new ArrayList<String>());    // pinyin
+        result.add(new ArrayList<String>());    // meanings
+
+        if (singleton == null) {
+            return null;    // return null if dictionary is not loaded yet
+        }
+
+        for (int i = 0; i < simplified.size(); i++) {
+            if (simplified.get(i) != null && simplified.get(i).contains(search)) {
+                result.get(0).add(simplified.get(i));
+                result.get(1).add(pinyin.get(i));
+                result.get(2).add(meaningsUnsplit.get(i));
+            }
+        }
+
+        if (!result.get(0).isEmpty()) {
+            return result;
+        }
+        else {
+            return null;    // return null if pinyin is not found
+        }
     }
 }
