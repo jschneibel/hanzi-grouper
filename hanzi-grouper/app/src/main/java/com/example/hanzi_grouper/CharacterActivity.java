@@ -88,8 +88,5 @@ public class CharacterActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
     }
-
 }

@@ -89,22 +89,6 @@ public class Dictionary {
                     simplifiedToMeaning.put(simplified.get(i), meaningsUnsplit.get(i));
                 }
             }
-
-//            Log.d("custom", "Length simplified: " + simplified.size());
-//            Log.d("custom", "Length traditional: " + traditional.size());
-//            Log.d("custom", "Length pinyin: " + pinyin.size());
-//            Log.d("custom", "Length meaningsUnsplit: " + meaningsUnsplit.size());
-//            Log.d("custom", "Length meanings: " + meanings.size());
-
-//            int id = 49982;
-            int id = 5002;
-            Log.d("custom", "Sample entry: ");
-            Log.d("custom", simplified.get(id));
-            Log.d("custom", traditional.get(id));
-            Log.d("custom", pinyin.get(id));
-            Log.d("custom", meaningsUnsplit.get(id));
-            Log.d("custom", meanings.get(id).toString());
-
         } catch (IOException e) {
             // TODO: catch or throw exception
             Log.d("custom", "Couldn't parse dictionary resource.");
@@ -119,7 +103,7 @@ public class Dictionary {
         // index 2: meaning
         String[] record = new String[3];
 
-        // search for hanzi or pinyin
+        // search for character or pinyin
 
         // if record can be found
             // store record in arraylist

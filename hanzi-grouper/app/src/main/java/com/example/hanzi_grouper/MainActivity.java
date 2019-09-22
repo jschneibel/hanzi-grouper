@@ -98,8 +98,11 @@ public class MainActivity extends AppCompatActivity {
                             } else if (group == null) {    // group is null if name is not a duplicate
                                 group = new Group(newGroupName);
                                 groups.add(group);
+
                                 overviewRecyclerAdapter.notifyItemInserted(groups.size() - 1);
+
                                 GroupPreferences.saveGroups(groups, MainActivity.this);
+
                                 snackbarMessage = "New group '" + newGroupName + "' created.";
                             } else {
                                 snackbarMessage = "Group '" + newGroupName + "' already exists.";
