@@ -90,7 +90,6 @@ public class Dictionary {
                 }
             }
         } catch (IOException e) {
-            // TODO: catch or throw exception
             Log.d("custom", "Couldn't parse dictionary resource.");
         }
     }
