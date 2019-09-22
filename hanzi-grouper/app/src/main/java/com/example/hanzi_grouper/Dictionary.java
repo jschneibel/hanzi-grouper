@@ -56,13 +56,13 @@ public class Dictionary {
 
                     // Only include single characters.
                     if (delimited[0].length() == 1) {
-                        simplified.add(delimited[0]);
-
-                        delimited = delimited[1].split(" \\[", 2);
                         traditional.add(delimited[0]);
 
+                        delimited = delimited[1].split(" \\[", 2);
+                        simplified.add(delimited[0]);
+
                         delimited = delimited[1].split("\\] \\/", 2);
-                        pinyin.add(delimited[0]);
+                        pinyin.add(delimited[0].replace("u:", "ü"));
 
                         // Remove trailing forward slash.
                         delimited[1] = delimited[1].substring(0, delimited[1].length() - 1);
@@ -131,10 +131,16 @@ public class Dictionary {
     public ArrayList<String> findEntryByCharacter(String character) {
         ArrayList<String> result = new ArrayList<String>();
 
-        result.add("1");
-        result.add("2");
-        result.add("3");
+        int index = simplified.indexOf(character);
 
-        return result;
+        if (index != -1) {
+            result.add(simplified.get(index));
+            result.add(pinyin.get(index));
+            result.add(meaningsUnsplit.get(index));
+
+            return result;
+        }
+
+        return null;
     }
 }

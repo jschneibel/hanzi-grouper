@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        groups = GroupPreferences.loadGroups(this);
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        groups = GroupPreferences.loadGroups(this);
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);

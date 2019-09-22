@@ -26,8 +26,8 @@ public abstract class GroupPreferences {
     private static final String PREFERENCES = "groups"; // Name of the SharedPreference
     private static final String GROUP_NAMES = "groupNames"; // Key containing all group names
     private static final String GROUP_NAME_PREFIX = "#"; // Prefix for each group name key
-    private static final String DELIMITER = "|";
-    private static final String DELIMITER_REGEX = "\\|";
+    private static final String DELIMITER = "||";
+    private static final String DELIMITER_REGEX = "\\|\\|";
 
     public static void saveGroups(ArrayList<Group> groups, Context ctx) {
         SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCES, 0);
@@ -100,7 +100,7 @@ public abstract class GroupPreferences {
 
             }
             else {
-                Snackbar.make(((Activity) ctx).findViewById(R.id.new_group), "Error: Corrupted group '" + groupName + "'.", Snackbar.LENGTH_LONG)
+                Snackbar.make(((Activity) ctx).findViewById(R.id.toolbar), "Deleted corrupted group '" + groupName + "'.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break; // omit group if data is corrupted
             }

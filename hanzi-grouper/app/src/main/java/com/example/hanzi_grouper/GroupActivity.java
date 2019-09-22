@@ -29,11 +29,11 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        groups = GroupPreferences.loadGroups(this);
-
         setContentView(R.layout.activity_group);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        groups = GroupPreferences.loadGroups(this);
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);
@@ -48,14 +48,17 @@ public class GroupActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<String> result = dictionary.findEntryByCharacter("椋");
                 ArrayList<String> characters = group.getCharacters();
                 ArrayList<String> pinyin = group.getPinyin();
                 ArrayList<String> meanings = group.getMeanings();
+
+                ArrayList<String> result = dictionary.findEntryByCharacter("绿");
+//                绿椋
                 characters.add(result.get(0));
                 pinyin.add(result.get(1));
                 meanings.add(result.get(2));
                 group.setEntries(characters, pinyin, meanings);
+
                 groupRecyclerAdapter.notifyItemInserted(group.size() - 1);
                 GroupPreferences.saveGroups(groups, GroupActivity.this);
 
