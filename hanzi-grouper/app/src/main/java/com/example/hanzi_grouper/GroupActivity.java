@@ -42,7 +42,7 @@ public class GroupActivity extends AppCompatActivity {
         String groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);
         group = GroupPreferences.findGroupByName(groups, groupName);
 
-        getSupportActionBar().setTitle(group.getName());
+        getSupportActionBar().setTitle(groupName);
 
         FloatingActionButton fab = findViewById(R.id.new_character);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,8 +52,8 @@ public class GroupActivity extends AppCompatActivity {
                 ArrayList<String> pinyin = group.getPinyin();
                 ArrayList<String> meanings = group.getMeanings();
 
-                ArrayList<String> result = dictionary.findEntryByCharacter("绿");
-//                绿椋
+                ArrayList<String> result = dictionary.findEntryByCharacter("喜");
+//                绿椋绹咚锵恭喜
                 characters.add(result.get(0));
                 pinyin.add(result.get(1));
                 meanings.add(result.get(2));
