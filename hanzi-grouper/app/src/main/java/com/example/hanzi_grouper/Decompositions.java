@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Decompositions {
@@ -48,6 +51,11 @@ public class Decompositions {
 //      8 Notes
 //      9 Section
 
+//      Note: The characters are not always divided into left and right, they can also be divided
+//      into top and bottom. However, the labels used are always LeftComponent and RightComponent.
+
+//      Note: Contains simplified and traditional characters.
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(decompositionsStream));
 
         try {
@@ -71,23 +79,96 @@ public class Decompositions {
     }
 
     public ArrayList<String> findSimilarCharacters(String search) {
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<ArrayList<String>> results = new ArrayList<>();
+
+        // one result stores (0) character, (1) left component and (2) right component
+        ArrayList<String> result;
+
+//        results.add(new ArrayList<String>());    // result characters
+//        results.add(new ArrayList<String>());    // result left components
+//        results.add(new ArrayList<String>());    // result left strokes
+//        results.add(new ArrayList<String>());    // result right components
+//        results.add(new ArrayList<String>());    // result right strokes
 
         if (singleton == null) {
             return null;    // return null if dictionary is not loaded yet
         }
 
-//        int index = simplified.indexOf(search);
-//
-//        if (index != -1) {
-//            result.add(simplified.get(index));
-//            result.add(pinyin.get(index));
-//            result.add(meaningsUnsplit.get(index));
-//
-//            return result;
-//        }
+        int searchIndex = characters.indexOf(search);
+        String searchLeftComponent = leftComponents.get(searchIndex);
+        String searchRightComponent = rightComponents.get(searchIndex);
 
-        return null;    // return null if character is not found
+        for (int i = 0; i < characters.size(); i++) {
+            if (leftComponents.get(i).equals(search)
+                    || leftComponents.get(i).equals(searchLeftComponent)
+                    || leftComponents.get(i).equals(searchRightComponent)
+                    || rightComponents.get(i).equals(search)
+                    || rightComponents.get(i).equals(searchLeftComponent)
+                    || rightComponents.get(i).equals(searchRightComponent)
+                    || characters.get(i).equals(searchLeftComponent)
+                    || characters.get(i).equals(searchRightComponent)) {
+                if (!characters.get(i).equals(search)) {
+                    result = new ArrayList<>();
+                    result.add(characters.get(i));
+                    result.add(leftComponents.get(i));
+                    result.add(rightComponents.get(i));
+
+                    results.add(result);
+                }
+            }
+        }
+
+        if (results.isEmpty()) {
+            return null;    // return null if character is not found
+        } else {
+            ArrayList<String> comparisonSearch = new ArrayList<>();
+            comparisonSearch.add(search);
+            comparisonSearch.add(searchLeftComponent);
+            comparisonSearch.add(searchRightComponent);
+            results.sort(new CharacterComparator(comparisonSearch)); // sort from low to high similarity
+            Collections.reverse(results);   // sort from high to low similarity
+
+            // only return characters (without component info)
+            ArrayList<String> resultCharacters = new ArrayList<>();
+            for (ArrayList<String> r : results) {
+                resultCharacters.add(r.get(0));
+            }
+
+            return resultCharacters;
+        }
     }
 
+    public class CharacterComparator implements Comparator<ArrayList<String>> {
+        // sorts from low similarity to high similarity to search character
+
+        // one ArrayList stores (0) character, (1) left component and (2) right component
+        private ArrayList<String> search;
+
+        public CharacterComparator(ArrayList<String> search) {
+            this.search = search;
+        }
+
+        @Override
+        public int compare(ArrayList<String> characterA, ArrayList<String> characterB) {
+            // higher score means higher similarity
+            int scoreA = 0;
+            int scoreB = 0;
+
+            if (search.get(2).equals(characterA.get(2))) scoreA += 4;
+            if (search.get(0).equals(characterA.get(2))) scoreA += 3;
+            if (search.get(2).equals(characterA.get(0))) scoreA += 3;
+            if (search.get(1).equals(characterA.get(1))) scoreA += 2;
+            if (search.get(0).equals(characterA.get(1))) scoreA += 1;
+            if (search.get(1).equals(characterA.get(0))) scoreA += 1;
+
+            if (search.get(2).equals(characterB.get(2))) scoreA += 4;
+            if (search.get(0).equals(characterB.get(2))) scoreA += 3;
+            if (search.get(2).equals(characterB.get(0))) scoreA += 3;
+            if (search.get(1).equals(characterB.get(1))) scoreA += 2;
+            if (search.get(0).equals(characterB.get(1))) scoreA += 1;
+            if (search.get(1).equals(characterB.get(0))) scoreA += 1;
+
+            return scoreA - scoreB;
+        }
+    }
 }

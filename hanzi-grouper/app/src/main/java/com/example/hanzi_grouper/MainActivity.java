@@ -26,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     static final String EXTRA_GROUP = "com.example.hanzi_grouper.GROUP";
 
-    private Dictionary dictionary;      // static singleton
-    private ArrayList<Group> groups;    // all persisted groups
+    private Dictionary dictionary;          // static singleton
+    private Decompositions decompositions;  // static singleton
+    private ArrayList<Group> groups;        // all persisted groups
 
     private OverviewRecyclerAdapter overviewRecyclerAdapter;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);
+        InputStream decompositionsStream = getResources().openRawResource(R.raw.decompositions);
+        decompositions = Decompositions.getDecompositions(decompositionsStream);
 
         FloatingActionButton fab = findViewById(R.id.new_group);
         fab.setOnClickListener(new NewGroupOnClickListener());

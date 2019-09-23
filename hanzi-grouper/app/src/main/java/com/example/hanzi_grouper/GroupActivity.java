@@ -24,9 +24,10 @@ public class GroupActivity extends AppCompatActivity {
 
     static final String EXTRA_CHARACTER = "com.example.hanzi_grouper.CHARACTER";
 
-    private Dictionary dictionary;      // static singleton
-    private ArrayList<Group> groups;    // all persisted groups
-    private Group group;                // displayed group
+    private Dictionary dictionary;          // static singleton
+    private Decompositions decompositions;  // static singleton
+    private ArrayList<Group> groups;        // all persisted groups
+    private Group group;                    // displayed group
 
     private GroupRecyclerAdapter groupRecyclerAdapter;
 
@@ -43,6 +44,8 @@ public class GroupActivity extends AppCompatActivity {
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);
+        InputStream decompositionsStream = getResources().openRawResource(R.raw.decompositions);
+        decompositions = Decompositions.getDecompositions(decompositionsStream);
 
         Intent intent = getIntent();
         String groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);

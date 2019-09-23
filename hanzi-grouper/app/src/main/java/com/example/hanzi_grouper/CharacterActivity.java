@@ -15,9 +15,10 @@ import java.util.ArrayList;
 
 public class CharacterActivity extends AppCompatActivity {
 
-    private Dictionary dictionary;      // static singleton
-    private ArrayList<Group> groups;    // all persisted groups
-    private Group group;                // displayed group
+    private Dictionary dictionary;          // static singleton
+    private Decompositions decompositions;  // static singleton
+    private ArrayList<Group> groups;        // all persisted groups
+    private Group group;                    // displayed group
     private String groupName;
     private String character;
 
@@ -43,6 +44,8 @@ public class CharacterActivity extends AppCompatActivity {
 
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);
+        InputStream decompositionsStream = getResources().openRawResource(R.raw.decompositions);
+        decompositions = Decompositions.getDecompositions(decompositionsStream);
 
         Intent intent = getIntent();
         groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);
