@@ -7,7 +7,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -81,6 +83,22 @@ public class CharacterActivity extends AppCompatActivity {
                 pinyinView.setTextColor(toneColors[i - 1]);
                 break;
             }
+        }
+
+        LayoutInflater layoutInflater = getLayoutInflater();
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layout_similar_characters);
+        for (int i = 0; i < 10; i++) {
+//            TextView textView = new TextView(this);
+//            textView.setText("xxxx: " + i);
+//            linearLayout.addView(textView);
+            LinearLayout innerLayout = new LinearLayout(this);
+            linearLayout.addView(innerLayout);
+            View v = layoutInflater.inflate(R.layout.layout_group_recycler, innerLayout, true);
+            TextView similarCharacterView = v.findViewById(R.id.character);
+            TextView similarPinyinView = v.findViewById(R.id.pinyin);
+            TextView similarMeaningsView = v.findViewById(R.id.meaning);
+
+            similarCharacterView.setText("xxxxxxxx");
         }
 
         FloatingActionButton fab = findViewById(R.id.fab);
