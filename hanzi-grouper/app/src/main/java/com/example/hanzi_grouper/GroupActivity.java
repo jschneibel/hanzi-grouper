@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
 
-    static final String EXTRA_CHARACTER = "com.example.hanzi_grouper.CHARACTER";
+    static final String EXTRA_GROUP_CHARACTER = "com.example.hanzi_grouper.GROUP_CHARACTER";
 
     private Dictionary dictionary;          // static singleton
     private Decompositions decompositions;  // static singleton
@@ -150,7 +149,7 @@ public class GroupActivity extends AppCompatActivity {
 
             Intent intent = new Intent(GroupActivity.this, CharacterActivity.class);
             intent.putExtra(MainActivity.EXTRA_GROUP, group.getName());
-            intent.putExtra(EXTRA_CHARACTER, character);
+            intent.putExtra(EXTRA_GROUP_CHARACTER, character);
             startActivity(intent);
 
 //            Snackbar.make(findViewById(R.id.new_character), "Character: " + character, Snackbar.LENGTH_LONG)
