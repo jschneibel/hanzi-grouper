@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -68,6 +69,13 @@ public class GroupActivity extends AppCompatActivity {
         groupRecycler.setAdapter(groupRecyclerAdapter);
         groupRecycler.setLayoutManager(new LinearLayoutManager(this));
         groupRecyclerAdapter.setOnClickListener(new GroupRecyclerOnClickListener());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_group, menu);
+        return true;
     }
 
     class NewCharacterOnClickListener implements View.OnClickListener {

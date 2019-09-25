@@ -27,15 +27,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        />
-    <TextView android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin" />
+
+    <TextView
         android:layout_width="wrap_content"
-        android:text="+"
+        android:layout_height="wrap_content"
         android:elevation="6dp"
-        android:textSize="32dp"
+        android:text="+"
         android:textColor="#fff"
+        android:textSize="32dp"
         app:layout_anchor="@id/new_character"
-        app:layout_anchorGravity="center"/>
+        app:layout_anchorGravity="center" />
 
 </android.support.design.widget.CoordinatorLayout>
