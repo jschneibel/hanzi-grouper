@@ -106,7 +106,9 @@ public class CharacterActivity extends AppCompatActivity {
 
         characterView.setText(displayedCharacter.get(0));
         pinyinView.setText(displayedCharacter.get(1));
-        meaningsView.setText(displayedCharacter.get(2).replace("/", "\n"));
+
+        String displayedMeaning = "• " + displayedCharacter.get(2).replace("/", "\n• ");
+        meaningsView.setText(displayedMeaning);
 
         int[] toneColors = {
                 ContextCompat.getColor(this, R.color.colorTone1),
