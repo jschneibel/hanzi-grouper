@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="name"
         android:textColor="#1E1E1E"
-        android:textSize="36sp" />
+        android:textSize="30sp" />
     <TextView
         android:id="@+id/group_chars"
         android:layout_width="wrap_content"
