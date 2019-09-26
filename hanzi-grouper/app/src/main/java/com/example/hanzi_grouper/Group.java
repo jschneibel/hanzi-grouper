@@ -66,9 +66,13 @@ public class Group {
     }
 
     public void addEntry(String character, String pinyin, String meaning) {
-        this.characters.add(character);
-        this.pinyin.add(pinyin);
-        this.meanings.add(meaning);
+        if ((character != null) && (pinyin != null) && (meaning != null)) {
+            this.characters.add(character);
+            this.pinyin.add(pinyin);
+            this.meanings.add(meaning);
+        } else {
+            throw new IllegalArgumentException("Null input in addEntry() not allowed.");
+        }
     }
 
     public void removeEntry(String character) {

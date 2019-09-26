@@ -76,8 +76,7 @@ public class CharacterActivity extends AppCompatActivity {
                     .get(characterIndex));
             displayedCharacter.add(group
                     .getMeanings()
-                    .get(characterIndex)
-                    .replace("/", "\n"));
+                    .get(characterIndex));
 
             getSupportActionBar().setTitle(groupName + ": " + groupCharacter);
             showMenuItemAdd = false;
@@ -109,7 +108,7 @@ public class CharacterActivity extends AppCompatActivity {
 
         characterView.setText(displayedCharacter.get(0));
         pinyinView.setText(displayedCharacter.get(1));
-        meaningsView.setText(displayedCharacter.get(2));
+        meaningsView.setText(displayedCharacter.get(2).replace("/", "\n"));
 
         int[] toneColors = {
                 ContextCompat.getColor(this, R.color.colorTone1),
@@ -194,6 +193,7 @@ public class CharacterActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // do nothing
                         }
                     });
 
@@ -203,7 +203,17 @@ public class CharacterActivity extends AppCompatActivity {
         }
 
         if (id == R.id.add) {
+            group.addEntry(displayedCharacter.get(0),
+                    displayedCharacter.get(1),
+                    displayedCharacter.get(2));
+            GroupPreferences.saveGroups(groups, CharacterActivity.this);
 
+            String snackbarMessage = "Character '" + displayedCharacter.get(0) + "' added.";
+
+            Intent intent = new Intent(CharacterActivity.this, GroupActivity.class);
+            intent.putExtra(Extras.EXTRA_MESSAGE, snackbarMessage);
+            intent.putExtra(Extras.EXTRA_GROUP, groupName);
+            startActivity(intent);
 
             return true;
         }

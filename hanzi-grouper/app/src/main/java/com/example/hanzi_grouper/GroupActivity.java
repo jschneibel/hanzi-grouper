@@ -133,24 +133,15 @@ public class GroupActivity extends AppCompatActivity {
                     .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String newCharacter = characterEditText.getText().toString();
-
                             String snackbarMessage;
-
-                            ArrayList<String> characters = group.getCharacters();
-                            ArrayList<String> pinyin = group.getPinyin();
-                            ArrayList<String> meanings = group.getMeanings();
 
                             // Sample characters: 绿 椋 绹 咚 锵 恭 喜
                             ArrayList<String> result = dictionary.findEntryByCharacter(newCharacter);
                             if (result != null) {
-                                characters.add(result.get(0));
-                                pinyin.add(result.get(1));
-                                meanings.add(result.get(2));
-                                group.setEntries(characters, pinyin, meanings);
+                                group.addEntry(result.get(0), result.get(1), result.get(2));
+                                GroupPreferences.saveGroups(groups, GroupActivity.this);
 
                                 groupRecyclerAdapter.notifyItemInserted(group.size() - 1);
-
-                                GroupPreferences.saveGroups(groups, GroupActivity.this);
 
                                 snackbarMessage = "Character " + newCharacter + " added.";
                             }
