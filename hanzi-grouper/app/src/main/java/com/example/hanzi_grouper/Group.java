@@ -15,10 +15,7 @@ public class Group {
         this.name = name;
     }
 
-    public Group(String name,
-                 List<String> characters,
-                 List<String> pinyin,
-                 List<String> meanings) {
+    public Group(String name, List<String> characters, List<String> pinyin, List<String> meanings) {
         this(name);
         setEntries(characters, pinyin, meanings);
     }
@@ -39,7 +36,7 @@ public class Group {
         return new ArrayList<String>(meanings);
     }
 
-    public void setName(String name) throws IllegalArgumentException {
+    public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException();
         }
@@ -72,6 +69,19 @@ public class Group {
         this.characters.add(character);
         this.pinyin.add(pinyin);
         this.meanings.add(meaning);
+    }
+
+    public void removeEntry(String character) {
+        int characterIndex = this.characters.indexOf(character);
+
+        if (characterIndex == -1) {
+            throw new IllegalArgumentException(
+                    "Group does not contain character to be removed.");
+        } else {
+            this.characters.remove(characterIndex);
+            this.pinyin.remove(characterIndex);
+            this.meanings.remove(characterIndex);
+        }
     }
 
     public int size() {

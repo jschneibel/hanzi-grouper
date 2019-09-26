@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
-    
+
     private Dictionary dictionary;          // static singleton
     private Decompositions decompositions;  // static singleton
     private ArrayList<Group> groups;        // all persisted groups
@@ -68,6 +68,12 @@ public class GroupActivity extends AppCompatActivity {
         groupRecycler.setAdapter(groupRecyclerAdapter);
         groupRecycler.setLayoutManager(new LinearLayoutManager(this));
         groupRecyclerAdapter.setOnClickListener(new GroupRecyclerOnClickListener());
+
+        String snackbarMessage = intent.getStringExtra(Extras.EXTRA_MESSAGE);
+        if (snackbarMessage != null) {
+            Snackbar.make(groupRecycler, snackbarMessage, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
@@ -79,7 +85,6 @@ public class GroupActivity extends AppCompatActivity {
 
         if (id == R.id.delete) {
             AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivity.this);
-            LayoutInflater inflater = getLayoutInflater();
 
             builder.setTitle("Delete Group")
                     .setMessage("Delete group '" + group.getName() + "'?")

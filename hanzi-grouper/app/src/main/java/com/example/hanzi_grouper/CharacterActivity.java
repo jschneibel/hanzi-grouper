@@ -1,14 +1,17 @@
 package com.example.hanzi_grouper;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,8 +43,6 @@ public class CharacterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        groups = GroupPreferences.loadGroups(this);
-
         InputStream dictionaryStream = getResources().openRawResource(R.raw.cedict_ts);
         dictionary = Dictionary.getDictionary(dictionaryStream);
         InputStream decompositionsStream = getResources().openRawResource(R.raw.decompositions);
@@ -51,6 +52,9 @@ public class CharacterActivity extends AppCompatActivity {
         groupName = intent.getStringExtra(Extras.EXTRA_GROUP);
         groupCharacter = intent.getStringExtra(Extras.EXTRA_GROUP_CHARACTER);
         similarCharacter = intent.getStringExtra(Extras.EXTRA_SIMILAR_CHARACTER);
+
+        groups = GroupPreferences.loadGroups(this);
+        group = GroupPreferences.findGroupByName(groups, groupName);
 
         if (similarCharacter == null) {
             displayedCharacter.add(groupCharacter);
@@ -65,7 +69,6 @@ public class CharacterActivity extends AppCompatActivity {
                 }
             });
 
-            group = GroupPreferences.findGroupByName(groups, groupName);
             int characterIndex = group.getCharacters().indexOf(groupCharacter);
 
             displayedCharacter.add(group
@@ -162,15 +165,50 @@ public class CharacterActivity extends AppCompatActivity {
                 });
             }
         }
+    }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.delete) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CharacterActivity.this);
+
+            builder.setTitle("Delete Character")
+                    .setMessage("Delete character '" + groupCharacter + "' from group '" + group.getName() + "'?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            group.removeEntry(groupCharacter);
+                            GroupPreferences.saveGroups(groups, CharacterActivity.this);
+
+                            String snackbarMessage = "Character '" + groupCharacter + "' deleted.";
+
+                            Intent intent = new Intent(CharacterActivity.this, GroupActivity.class);
+                            intent.putExtra(Extras.EXTRA_MESSAGE, snackbarMessage);
+                            intent.putExtra(Extras.EXTRA_GROUP, groupName);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+
+            builder.show();
+
+            return true;
+        }
+
+        if (id == R.id.add) {
+
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
