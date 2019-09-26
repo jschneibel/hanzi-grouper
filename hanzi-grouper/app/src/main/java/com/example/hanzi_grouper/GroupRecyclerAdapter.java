@@ -1,15 +1,11 @@
 package com.example.hanzi_grouper;
 
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.GroupRecyclerHolder> {
     private Group group;

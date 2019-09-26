@@ -69,6 +69,7 @@ public class GroupActivity extends AppCompatActivity {
         groupRecycler.setLayoutManager(new LinearLayoutManager(this));
         groupRecyclerAdapter.setOnClickListener(new GroupRecyclerOnClickListener());
 
+        // show snackbar message if there is one (delivered by intent)
         String snackbarMessage = intent.getStringExtra(Extras.EXTRA_MESSAGE);
         if (snackbarMessage != null) {
             Snackbar.make(groupRecycler, snackbarMessage, Snackbar.LENGTH_LONG)
@@ -78,9 +79,6 @@ public class GroupActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.delete) {
@@ -115,7 +113,6 @@ public class GroupActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_group, menu);
         return true;
     }
@@ -192,9 +189,6 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra(Extras.EXTRA_GROUP, group.getName());
             intent.putExtra(Extras.EXTRA_GROUP_CHARACTER, character);
             startActivity(intent);
-
-//            Snackbar.make(findViewById(R.id.new_character), "Character: " + character, Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
         }
     }
 }

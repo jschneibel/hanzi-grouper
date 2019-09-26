@@ -3,8 +3,6 @@ package com.example.hanzi_grouper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +29,7 @@ public class CharacterActivity extends AppCompatActivity {
     private String groupCharacter;                  // selected character of selected group
     private String similarCharacter;                // selected similar character (may be null)
     private ArrayList<String> recommendedCharacters;    // recommended similar characters
-    // displayed character (groupCharacter or similarCharacter)
+    // displayed character (groupCharacter or similarCharacter) with character, pinyin and meaning
     private ArrayList<String> displayedCharacter = new ArrayList<>();
 
 
@@ -168,9 +166,6 @@ public class CharacterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.delete) {
@@ -223,7 +218,6 @@ public class CharacterActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_character, menu);
 
         menu.findItem(R.id.add).setVisible(showMenuItemAdd);

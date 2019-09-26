@@ -1,7 +1,5 @@
 package com.example.hanzi_grouper;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +46,9 @@ public class Group {
     public void setEntries(List<String> characters,
                            List<String> pinyin,
                            List<String> meanings) {
-
-        // commented because setEntries should throw exception when passed null
-//        characters = (characters == null) ? new ArrayList<String>() : characters;
-//        pinyin = (pinyin == null) ? new ArrayList<String>() : pinyin;
-//        meanings = (meanings == null) ? new ArrayList<String>() : meanings;
+        if ((characters == null) || (pinyin == null) || meanings == null) {
+            throw new IllegalArgumentException("Null input in setEntries() not allowed.");
+        }
 
         if ((characters.size() == pinyin.size()) && (pinyin.size() == meanings.size())) {
             this.characters = new ArrayList<>(characters);

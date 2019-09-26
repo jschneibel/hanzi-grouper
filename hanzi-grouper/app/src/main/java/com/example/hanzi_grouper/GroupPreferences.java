@@ -21,7 +21,8 @@ import java.util.List;
 // Value: characters, pinyin and meanings (in this order per character) of the group
 // delimited by DELIMITER
 //
-// If a group is deleted, its contents get "orphaned" (its key is deleted, its value is not).
+// If a group is deleted, its contents get "orphaned" (its key is deleted from GROUP_NAMES, but the
+// key itself and associated values, i.e. the contents of the group, are not).
 
 public abstract class GroupPreferences {
 
@@ -44,7 +45,6 @@ public abstract class GroupPreferences {
             StringBuilder groupEntries = new StringBuilder();
 
             if (group.size() > 0) {
-
                 for (int i = 0; i < group.size(); i++) {
                     groupEntries.append(group.getCharacters().get(i));
                     groupEntries.append(DELIMITER);
@@ -104,7 +104,7 @@ public abstract class GroupPreferences {
                     i++;
                 }
             } else if (groupContents[0].equals("")) {
-
+                // empty group
             } else {
                 Snackbar.make(((Activity) ctx).findViewById(R.id.toolbar), "Deleted corrupted group '" + groupName + "'.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();

@@ -7,11 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 public class Decompositions {
     private static Decompositions singleton;
@@ -38,7 +35,6 @@ public class Decompositions {
     }
 
     private void parseDecompositionsFile(InputStream decompositionsStream) {
-
 //      Columns in file:
 //      0 Character
 //      1 Strokes
@@ -83,12 +79,6 @@ public class Decompositions {
 
         // one result stores (0) character, (1) left component and (2) right component
         ArrayList<String> result;
-
-//        results.add(new ArrayList<String>());    // result characters
-//        results.add(new ArrayList<String>());    // result left components
-//        results.add(new ArrayList<String>());    // result left strokes
-//        results.add(new ArrayList<String>());    // result right components
-//        results.add(new ArrayList<String>());    // result right strokes
 
         if (singleton == null) {
             return null;    // return null if dictionary is not loaded yet
