@@ -24,7 +24,6 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final String EXTRA_GROUP = "com.example.hanzi_grouper.GROUP";
 
     private Dictionary dictionary;          // static singleton
     private Decompositions decompositions;  // static singleton
@@ -55,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
         overviewRecycler.setAdapter(overviewRecyclerAdapter);
         overviewRecycler.setLayoutManager(new LinearLayoutManager(this));
         overviewRecyclerAdapter.setOnClickListener(new OverviewRecyclerOnClickListener());
+
+        Intent intent = getIntent();
+        String snackbarMessage = intent.getStringExtra(Extras.EXTRA_MESSAGE);
+        if (snackbarMessage != null) {
+            Snackbar.make(overviewRecycler, snackbarMessage, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
@@ -151,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             String groupName = groups.get(position).getName();
 
             Intent intent = new Intent(MainActivity.this, GroupActivity.class);
-            intent.putExtra(EXTRA_GROUP, groupName);
+            intent.putExtra(Extras.EXTRA_GROUP, groupName);
             startActivity(intent);
 
 //            Snackbar.make(findViewById(R.id.new_group), "nr: " + groupName, Snackbar.LENGTH_LONG)

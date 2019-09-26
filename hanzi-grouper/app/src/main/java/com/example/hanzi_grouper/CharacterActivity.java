@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class CharacterActivity extends AppCompatActivity {
 
-    static final String EXTRA_SIMILAR_CHARACTER = "com.example.hanzi_grouper.SIMILAR_CHARACTER";
+    private boolean showMenuItemAdd = false;
 
     private Dictionary dictionary;                  // static singleton
     private Decompositions decompositions;          // static singleton
@@ -48,9 +48,9 @@ public class CharacterActivity extends AppCompatActivity {
         decompositions = Decompositions.getDecompositions(decompositionsStream);
 
         Intent intent = getIntent();
-        groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);
-        groupCharacter = intent.getStringExtra(GroupActivity.EXTRA_GROUP_CHARACTER);
-        similarCharacter = intent.getStringExtra(CharacterActivity.EXTRA_SIMILAR_CHARACTER);
+        groupName = intent.getStringExtra(Extras.EXTRA_GROUP);
+        groupCharacter = intent.getStringExtra(Extras.EXTRA_GROUP_CHARACTER);
+        similarCharacter = intent.getStringExtra(Extras.EXTRA_SIMILAR_CHARACTER);
 
         if (similarCharacter == null) {
             displayedCharacter.add(groupCharacter);
@@ -60,7 +60,7 @@ public class CharacterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(CharacterActivity.this, GroupActivity.class);
-                    intent.putExtra(MainActivity.EXTRA_GROUP, groupName);
+                    intent.putExtra(Extras.EXTRA_GROUP, groupName);
                     startActivity(intent);
                 }
             });
@@ -77,6 +77,8 @@ public class CharacterActivity extends AppCompatActivity {
                     .replace("/", "\n"));
 
             getSupportActionBar().setTitle(groupName + ": " + groupCharacter);
+            showMenuItemAdd = false;
+            invalidateOptionsMenu();
         } else {
             displayedCharacter.add(similarCharacter);
 
@@ -85,8 +87,8 @@ public class CharacterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(CharacterActivity.this, CharacterActivity.class);
-                    intent.putExtra(MainActivity.EXTRA_GROUP, groupName);
-                    intent.putExtra(GroupActivity.EXTRA_GROUP_CHARACTER, groupCharacter);
+                    intent.putExtra(Extras.EXTRA_GROUP, groupName);
+                    intent.putExtra(Extras.EXTRA_GROUP_CHARACTER, groupCharacter);
                     startActivity(intent);
                 }
             });
@@ -94,6 +96,8 @@ public class CharacterActivity extends AppCompatActivity {
             displayedCharacter = dictionary.findEntryByCharacter(displayedCharacter.get(0));
 
             getSupportActionBar().setTitle(groupName + ": " + groupCharacter + " → " + displayedCharacter.get(0) + "");
+            showMenuItemAdd = true;
+            invalidateOptionsMenu();
         }
 
         TextView characterView = (TextView) findViewById(R.id.character);
@@ -150,9 +154,9 @@ public class CharacterActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(CharacterActivity.this, CharacterActivity.class);
-                        intent.putExtra(MainActivity.EXTRA_GROUP, groupName);
-                        intent.putExtra(GroupActivity.EXTRA_GROUP_CHARACTER, groupCharacter);
-                        intent.putExtra(CharacterActivity.EXTRA_SIMILAR_CHARACTER, recommendedCharacter);
+                        intent.putExtra(Extras.EXTRA_GROUP, groupName);
+                        intent.putExtra(Extras.EXTRA_GROUP_CHARACTER, groupCharacter);
+                        intent.putExtra(Extras.EXTRA_SIMILAR_CHARACTER, recommendedCharacter);
                         startActivity(intent);
                     }
                 });
@@ -173,6 +177,10 @@ public class CharacterActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_character, menu);
+
+        menu.findItem(R.id.add).setVisible(showMenuItemAdd);
+        menu.findItem(R.id.delete).setVisible(!showMenuItemAdd);
+
         return true;
     }
 }

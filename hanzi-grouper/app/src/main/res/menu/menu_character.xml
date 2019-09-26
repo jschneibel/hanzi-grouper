@@ -1,9 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.hanzi_grouper.MainActivity">
+    tools:context="com.example.hanzi_grouper.CharacterActivity">
     <item
         android:id="@+id/delete"
         android:title="delete"
+        app:showAsAction="ifRoom|withText"></item>
+    <item
+        android:id="@+id/add"
+        android:title="add"
         app:showAsAction="ifRoom|withText"></item>
 </menu>

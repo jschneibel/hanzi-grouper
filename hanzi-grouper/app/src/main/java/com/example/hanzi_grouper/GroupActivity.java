@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -21,9 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
-
-    static final String EXTRA_GROUP_CHARACTER = "com.example.hanzi_grouper.GROUP_CHARACTER";
-
+    
     private Dictionary dictionary;          // static singleton
     private Decompositions decompositions;  // static singleton
     private ArrayList<Group> groups;        // all persisted groups
@@ -48,7 +47,7 @@ public class GroupActivity extends AppCompatActivity {
         decompositions = Decompositions.getDecompositions(decompositionsStream);
 
         Intent intent = getIntent();
-        String groupName = intent.getStringExtra(MainActivity.EXTRA_GROUP);
+        String groupName = intent.getStringExtra(Extras.EXTRA_GROUP);
         group = GroupPreferences.findGroupByName(groups, groupName);
 
         getSupportActionBar().setTitle(groupName);
@@ -69,6 +68,44 @@ public class GroupActivity extends AppCompatActivity {
         groupRecycler.setAdapter(groupRecyclerAdapter);
         groupRecycler.setLayoutManager(new LinearLayoutManager(this));
         groupRecyclerAdapter.setOnClickListener(new GroupRecyclerOnClickListener());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.delete) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+
+            builder.setTitle("Delete Group")
+                    .setMessage("Delete group '" + group.getName() + "'?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            groups.remove(group);
+                            GroupPreferences.saveGroups(groups, GroupActivity.this);
+
+                            String snackbarMessage = "Group '" + group.getName() + "' deleted.";
+
+                            Intent intent = new Intent(GroupActivity.this, MainActivity.class);
+                            intent.putExtra(Extras.EXTRA_MESSAGE, snackbarMessage);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+
+            builder.show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -156,8 +193,8 @@ public class GroupActivity extends AppCompatActivity {
             String character = group.getCharacters().get(position);
 
             Intent intent = new Intent(GroupActivity.this, CharacterActivity.class);
-            intent.putExtra(MainActivity.EXTRA_GROUP, group.getName());
-            intent.putExtra(EXTRA_GROUP_CHARACTER, character);
+            intent.putExtra(Extras.EXTRA_GROUP, group.getName());
+            intent.putExtra(Extras.EXTRA_GROUP_CHARACTER, character);
             startActivity(intent);
 
 //            Snackbar.make(findViewById(R.id.new_character), "Character: " + character, Snackbar.LENGTH_LONG)
